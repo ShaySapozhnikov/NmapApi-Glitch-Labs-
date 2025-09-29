@@ -42,24 +42,19 @@ router.post('/sendCommand', (req, res) => {
 
 
   const commandArray = command.split(" ");
-  const Check =  validateCommandArray(commandArray);
+  const check =  validateCommandArray(commandArray);
+  console.log(check);
 
-  if(Check){
-    res.json({ success: true, message: `You sent: ${command}` }); 
+  if(check){
+    return res.json({ success: true, message: `You sent: ${command}` }); 
 
     //==============================================================\\
     //send to vm
 
-
-
-
-
-
-
-    //===============================================================\\
+    //=============================================================\\
   }
 
-  else{res.status(500)}
+  return res.status(500).json({ success: false, error: "Invalid command" });
 
 });
 

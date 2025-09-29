@@ -1,0 +1,7 @@
+{
+    "nmap" : true,
+    "-sn" : true,
+    "-Pn" : true,
+    "-p" :true,
+    "-sV" : true
+}
