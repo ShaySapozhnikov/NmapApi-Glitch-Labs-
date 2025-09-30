@@ -1,5 +1,3 @@
-
-
 const fs = require('fs');
 const path = require('path');
 
@@ -11,7 +9,10 @@ let allowedCommands = JSON.parse(fs.readFileSync(allowedCommandsPath, 'utf8'));
 
 function validateCommandArray(commandArray) {
 
-    const ipRegex = /^(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)){3}$/;
+    const ipRegex = /^(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)){3}$/; // ip format check
+    const isNumeric = /^[+-]?\d+(\.\d+)?$/; // check port is an digit
+
+
 
     const ip = commandArray[commandArray.length -1]; // grab ip
     const ipCheck = ipRegex.test(ip) // test ip
@@ -22,20 +23,51 @@ function validateCommandArray(commandArray) {
         return false
 
     } 
+    
 
     // check 2 see if commands are avalibale o(n)
-    //- todo
-    // checkl
-
+   
     for (let i = 0 ; i < commandArray.length - 1; i++)
     {
-        if (!allowedCommands[commandArray[i]])
+        if(!allowedCommands[commandArray[i]]) return false;
+        //console.log(commandArray[i]) debug
+
+
+        switch (allowedCommands[commandArray[i]].type)
         {
-            return false
+            case "command":
+                console.log("comand")
+                continue
+            case "flag":
+                console.log("flag")
+                continue
+            
+            case "number":
+
+                const value = commandArray[i + 1];
+                if (isNumeric.test(value))    
+                {
+                    console.log("This is an integer: " + value)
+                    //convert to int
+                    let validatedInteger = parseInt(commandArray[i + 1])
+
+                    console.log(validatedInteger)
+                  
+    
+                    if (allowedCommands[commandArray[i]].min <= validatedInteger && validatedInteger <= allowedCommands[commandArray[i]].max)
+                    {
+                        i++;
+                        continue;
+
+                    }
+                }
+                return false
+        
+            default:
+                console.log("unkown")
+                return false
         }
     }
-    
-    
     return true
     
        

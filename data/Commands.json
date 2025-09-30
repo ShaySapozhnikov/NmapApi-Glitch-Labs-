@@ -1,7 +1,20 @@
 {
-    "nmap" : true,
-    "-sn" : true,
-    "-Pn" : true,
-    "-p" :true,
-    "-sV" : true
+    "nmap": {
+      "type": "command"
+    },
+    "-sn": {
+      "type": "flag"
+    },
+    "-Pn": {
+      "type": "flag"
+    },
+    "-p": {
+      "type": "number",
+      "min": 1,
+      "max": 65535
+    },
+    "-sV": {
+      "type": "flag"
+    }
 }
+  
