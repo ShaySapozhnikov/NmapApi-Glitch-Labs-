@@ -10,7 +10,7 @@ let allowedCommands = JSON.parse(fs.readFileSync(allowedCommandsPath, 'utf8'));
 function validateCommandArray(commandArray) {
 
     const ipRegex = /^(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)){3}$/; // ip format check
-    const isNumeric = /^[+-]?\d+(\.\d+)?$/; // check port is an digit
+    const isNumeric = /^\d+$/; // check port is an digit
 
 
     const seen = new Set(); // avoid dupliate commands
@@ -59,13 +59,13 @@ function validateCommandArray(commandArray) {
                 
                 const value = commandArray[i + 1];
 
-                if (value == "" || allowedCommands[value]) continue; // allows any other command that exist to be after -p
+                if (allowedCommands[value]) continue; // allows any other command that exist to be after -p
                 
                 else
                 {
                     if (isNumeric.test(value))    
                         {
-                                console.log("This is an integer: " + value)
+                                //console.log("This is an integer: " + value)
                                 //convert to int
                                 let validatedInteger = parseInt(commandArray[i + 1])
                             
