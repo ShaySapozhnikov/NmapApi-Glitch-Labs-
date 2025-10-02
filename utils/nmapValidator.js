@@ -13,6 +13,7 @@ function validateCommandArray(commandArray) {
     const isNumeric = /^[+-]?\d+(\.\d+)?$/; // check port is an digit
 
 
+    const seen = new Set(); // avoid dupliate commands
 
     const ip = commandArray[commandArray.length -1]; // grab ip
     const ipCheck = ipRegex.test(ip) // test ip
@@ -30,7 +31,17 @@ function validateCommandArray(commandArray) {
     for (let i = 0 ; i < commandArray.length - 1; i++)
     {
         if(!allowedCommands[commandArray[i]]) return false;
-        //console.log(commandArray[i]) debug
+        console.log(commandArray[i]) 
+        
+        
+        const checkDuplicate = commandArray[i] 
+
+        // check for duplicates 
+        if(seen.has(checkDuplicate)){
+            return false
+        }
+        seen.add(checkDuplicate);
+        
 
 
         switch (allowedCommands[commandArray[i]].type)
@@ -42,27 +53,37 @@ function validateCommandArray(commandArray) {
                 console.log("flag")
                 continue
             
-            case "number":
-
+            case "p-number":
+                if (i + 1 >= commandArray.length) continue; // -p is at the end should still be valid 
+                
+                
                 const value = commandArray[i + 1];
-                if (isNumeric.test(value))    
+
+                if (value == "" || allowedCommands[value]) continue; // allows any other command that exist to be after -p
+                
+                else
                 {
-                    console.log("This is an integer: " + value)
-                    //convert to int
-                    let validatedInteger = parseInt(commandArray[i + 1])
+                    if (isNumeric.test(value))    
+                        {
+                                console.log("This is an integer: " + value)
+                                //convert to int
+                                let validatedInteger = parseInt(commandArray[i + 1])
+                            
+                                console.log(validatedInteger)
+                            
+                            
+                                if (allowedCommands[commandArray[i]].min <= validatedInteger && validatedInteger <= allowedCommands[commandArray[i]].max)
+                                {
+                                    i++;
+                                    continue;
+                                
+                                }
+                        }
 
-                    console.log(validatedInteger)
-                  
-    
-                    if (allowedCommands[commandArray[i]].min <= validatedInteger && validatedInteger <= allowedCommands[commandArray[i]].max)
-                    {
-                        i++;
-                        continue;
-
-                    }
                 }
-                return false
-        
+                continue
+            
+
             default:
                 console.log("unkown")
                 return false

@@ -9,7 +9,7 @@
       "type": "flag"
     },
     "-p": {
-      "type": "number",
+      "type": "p-number",
       "min": 1,
       "max": 65535
     },
