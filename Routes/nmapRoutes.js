@@ -13,6 +13,7 @@ const path = require('path');
 //-utils
 
 const validateCommandArray = require('../utils/nmapValidator')
+const simulateProgress = require('../utils/simulateTime')
 
 
 
@@ -36,6 +37,10 @@ router.get('/', (req, res) => {
 // POST /nmap/sendCommand - executes nmap command
 router.post('/sendCommand', (req, res) => {
   
+  const d = new Date();
+  const timeStringLocal = d.toLocaleTimeString(); // get time!
+
+  
   const { command } = req.body;
   console.log("Received command:", command);
 
@@ -46,13 +51,31 @@ router.post('/sendCommand', (req, res) => {
   console.log(check);
 
   if(check){
-    return res.json({ success: true, message: `You sent: ${command}` }); 
+    return res.json({
+      success: true,
+      output: [
+        `Starting Nmap 7.98 at ${timeStringLocal}`,
+        simulateProgress(new Date()), // Connect Scan Timing visual effect later on
+        `Nmap scan report for ${commandArray[commandArray.length - 1]}` // grab the ip scan 
+      ].join('\n')
+    });
+    //==============================================================\\
+    //display 01 output
 
     //==============================================================\\
     //send to vm
 
+    // get display 2 output
+
     //=============================================================\\
+
+    //final output
+
+
+    //=============================================================\\
+
   }
+
 
   return res.status(500).json({ success: false, error: "Invalid command" });
 
